@@ -2,6 +2,9 @@ package ru.demi.algorithms.bitmanipulation;
 
 import java.util.Scanner;
 
+/**
+ * https://www.hackerrank.com/challenges/maximizing-xor/problem
+ */
 public class MaximizingXOR {
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
