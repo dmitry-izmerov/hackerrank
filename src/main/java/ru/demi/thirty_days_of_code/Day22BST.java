@@ -1,4 +1,4 @@
-package ru.demi.algorithms.thirty_days_of_code;
+package ru.demi.thirty_days_of_code;
 
 import java.util.LinkedList;
 import java.util.Objects;
