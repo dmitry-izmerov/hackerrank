@@ -1,39 +1,39 @@
 package ru.demi.akvelon;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
+import static java.util.stream.Collectors.joining;
+
+/**
+ * Counting bits
+ */
 public class Task2 {
     public static void main(String[] args) throws IOException {
-        Scanner in = new Scanner(System.in);
-        final String fileName = System.getenv("OUTPUT_PATH");
-        BufferedWriter bw = null;
-        if (fileName != null) {
-            bw = new BufferedWriter(new FileWriter(fileName));
-        }
-        else {
-            bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        }
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
-        int[] res;
-        int n;
-        n = Integer.parseInt(in.nextLine().trim());
+        int n = Integer.parseInt(bufferedReader.readLine().trim());
 
-        res = getOneBits(n);
-        for(int res_i = 0; res_i < res.length; res_i++) {
-            bw.write(String.valueOf(res[res_i]));
-            bw.newLine();
-        }
+        List<Integer> result = getOneBits(n);
 
-        bw.close();
+        bufferedWriter.write(
+            result.stream()
+                .map(Object::toString)
+                .collect(joining("\n"))
+                + "\n"
+        );
+
+        bufferedReader.close();
+        bufferedWriter.close();
     }
 
-    static int[] getOneBits(int n) {
+    static List<Integer> getOneBits(int n) {
         int count = 0;
         int pos = 0;
         List<Integer> l = new ArrayList<>();
@@ -48,12 +48,12 @@ public class Task2 {
 
         int allPos = pos;
 
-        int[] ar = new int[l.size() + 1];
-        ar[0] = count;
-        for (int i = l.size() - 1, j = 1; i >= 0; --i, ++j) {
-            ar[j] = allPos - l.get(i);
+        List<Integer> res = new ArrayList<>(l.size() + 1);
+        res.add(count);
+        for (int i = l.size() - 1; i >= 0; --i) {
+            res.add(allPos - l.get(i));
         }
 
-        return ar;
+        return res;
     }
 }

@@ -5,8 +5,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
+/**
+ * Arrange the words
+ */
 public class Task1 {
     public static void main(String[] args) throws IOException {
         Scanner in = new Scanner(System.in);
@@ -41,26 +45,12 @@ public class Task1 {
         stE.deleteCharAt(split[split.length - 1].length() - 1);
         split[split.length - 1] = stE.toString();
 
-        Arrays.sort(split, (a, b) -> a.length() - b.length());
+        Arrays.sort(split, Comparator.comparingInt(String::length));
 
-        StringBuilder sb = new StringBuilder();
         char[] first = split[0].toCharArray();
         first[0] = Character.toUpperCase(first[0]);
-        sb.append(new String(first));
-        if (split.length > 1) {
-            sb.append(' ');
-        }
+        split[0] = new String(first);
 
-        for (int i = 1; i < split.length; i++) {
-            sb.append(split[i]);
-
-            if (i != split.length - 1) {
-                sb.append(' ');
-            }
-        }
-
-        sb.append('.');
-
-        return sb.toString();
+        return String.join(" ", split) + ".";
     }
 }
