@@ -3,6 +3,9 @@ package ru.demi.interview.preparation.arrays;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * TODO: improve solution
+ */
 public class ArrayManipulation {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
