@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -17,7 +16,8 @@ public class FrequencyQueries {
 
     static List<Integer> freqQuery(List<List<Integer>> queries) {
         List<Integer> result = new ArrayList<>();
-        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> map = new HashMap<>(queries.size() / 10);
+        Map<Integer, Integer> frequencies = new HashMap<>(queries.size() / 10);
 
         for (int i = 0; i < queries.size(); i++) {
             List<Integer> pair = queries.get(i);
@@ -25,21 +25,53 @@ public class FrequencyQueries {
             int value = pair.get(1);
             switch (operation) {
                 case 1:
-                    map.computeIfPresent(value, (key, oldValue) -> oldValue + 1);
-                    map.putIfAbsent(value, 1);
+                    map.computeIfPresent(value, (key, oldValue) -> {
+                        int newVal = oldValue + 1;
+
+                        frequencies.computeIfPresent(oldValue, (k, oldFreq) -> {
+                            Integer newFreq = oldFreq - 1;
+                            if (newFreq == 0) {
+                                newFreq = null;
+                            }
+                            return newFreq;
+                        });
+
+                        frequencies.computeIfPresent(newVal, (k, oldFreq) -> oldFreq + 1);
+                        frequencies.putIfAbsent(newVal, 1);
+
+                        return newVal;
+                    });
+                    map.computeIfAbsent(value, (key) -> {
+                        frequencies.computeIfPresent(1, (k, oldValue) -> oldValue + 1);
+                        frequencies.putIfAbsent(1, 1);
+                        return 1;
+                    });
                     break;
                 case 2:
                     map.computeIfPresent(value, (key, oldValue) -> {
                         Integer newVal = oldValue - 1;
+
+                        frequencies.computeIfPresent(oldValue, (k, oldFreq) -> {
+                            Integer newFreq = oldFreq - 1;
+                            if (newFreq == 0) {
+                                newFreq = null;
+                            }
+                            return newFreq;
+                        });
+
+                        frequencies.computeIfPresent(newVal, (k, oldFreq) -> oldFreq + 1);
+                        frequencies.putIfAbsent(newVal, 1);
+
                         if (newVal == 0) {
                             newVal = null;
                         }
+
                         return newVal;
                     });
                     break;
                 case 3:
                     int check = 0;
-                    if (new HashSet<>(map.values()).contains(value)) {
+                    if (frequencies.containsKey(value)) {
                         check = 1;
                     }
                     result.add(check);
